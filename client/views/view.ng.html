@@ -1,13 +1,8 @@
 <div class="container">
   <header>
-    <h1>Todo List</h1>
+    <h1>Datathon</h1>
   </header>
-
-  <ul class="collection">
-    <li class="collection-item" ng-repeat="task in tasks">{{ task.text }}</li>
-  </ul>
-
-  <div id="chart">
-    <svg></svg>
-  </div>
+  <div class="divider"></div>
+  <line-plus-bar-chart population-one="BMIPop1" population-two="BMIPop2"></line-plus-bar-chart>
+  <div class="divider"></div>
 </div>
