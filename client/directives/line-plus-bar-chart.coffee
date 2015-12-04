@@ -8,35 +8,47 @@ datathon.directive 'linePlusBarChart', ->
     _(populations).each (population) ->
       nv.addGraph ->
         data = population.data
-        chart = nv.models.linePlusBarChart().margin(
-          top: 30
-          right: 60
-          bottom: 50
-          left: 70).x((d, i) ->
-          i
-        ).y((d, i) ->
-          d[1]
-        )
+        chart = nv.models.linePlusBarChart()
+                            .margin(
+                              top: 0
+                              right: 10
+                              bottom: 50
+                              left: 70).x((d, i) ->
+                              i
+                            )
+                            .height(250)
+                            .y((d, i) ->
+                              d[1]
+                            )
         chart.xAxis.tickFormat (d) ->
           dx = data[0].values[d] and data[0].values[d][0] or 0
-          d3.time.format('%x') new Date(dx)
         chart.y1Axis.tickFormat d3.format(',f')
-        chart.y2Axis.tickFormat (d) ->
-          '$' + d3.format(',f')(d)
         chart.bars.forceY [ 0 ]
+        chart.tooltipContent((key, x, y) ->
+          "
+            <div class='datathon-tooltip'>
+              <h3>#{ x } yr(s) old</h3>
+              <p>
+                <span class='label'>BMI: </span>&nbsp;<span>#{ y }</span>
+              </p>
+            </div>
+          "
+        )
         d3.select("##{ population.id } svg").datum(data).transition().duration(0).call chart
         nv.utils.windowResize chart.update
         chart
   restrict: 'E'
   scope:
+    label: '@'
     populationOne: '='
     populationTwo: '='
   template: "
-    <div class='row'>
-      <div id='line-plus-bar-pop-1' class='col s6'>
+    <div class='row valign-wrapper'>
+      <div id='line-plus-bar-pop-1' class='col s5'>
         <svg></svg>
       </div>
-      <div id='line-plus-bar-pop-2' class='col s6'>
+      <div class='chart-label col s2 valign'><h5>{{ ::label }}</h5></div>
+      <div id='line-plus-bar-pop-2' class='col s5'>
         <svg></svg>
       </div>
     </div>

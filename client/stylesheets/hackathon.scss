@@ -1,1 +1,52 @@
-/* CSS declarations go here */
+.container {
+  width: 85%;
+
+  .charts-container {
+    margin-top: 6em;
+
+    svg {
+      height: 250px;
+    }
+
+    .chart-label {
+      text-align: center;
+      text-transform: uppercase;
+
+      h5 {
+        font-size: 1.4em;
+      }
+    }
+
+    .divider {
+      margin-top: 2em;
+      margin-bottom: 4em;
+
+      &:first-of-type { margin-top: 4em; }
+      &:last-of-type { margin-top: 2.5em; }
+    }
+
+    .nvd3 .nv-axis .nv-axisMaxMin text {
+      font-weight: normal;
+    }
+
+    .nvtooltip {
+      padding: 0;
+    }
+
+    .datathon-tooltip {
+      h3 {
+        background-color: darken(#31849a, 7%);
+        border-radius: 0px !important;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: .3em;
+        text-align: center;
+      }
+
+      .label {
+        font-weight: bold;
+      }
+    }
+  }
+}
