@@ -13,4 +13,7 @@ datathon.controller 'ApplicationCtrl', [
 
     $scope.visitPop1 = multiBarData
     $scope.visitPop2 = multiBarData
+
+    $scope.BPPop1 = lineData
+    $scope.BPPop2 = lineData
 ]
