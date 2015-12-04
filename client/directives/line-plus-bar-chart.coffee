@@ -13,17 +13,18 @@ datathon.directive 'linePlusBarChart', ->
                               top: 0
                               right: 10
                               bottom: 50
-                              left: 70).x((d, i) ->
+                              left: 70)
+                            .height(250)
+                            .x((d, i) ->
                               i
                             )
-                            .height(250)
                             .y((d, i) ->
                               d[1]
                             )
-        chart.xAxis.tickFormat (d) ->
-          dx = data[0].values[d] and data[0].values[d][0] or 0
-        chart.y1Axis.tickFormat d3.format(',f')
-        chart.bars.forceY [ 0 ]
+        # chart.xAxis.tickFormat (d) ->
+        #   dx = data[0].values[d] and data[0].values[d][0] or 0
+        # chart.y1Axis.tickFormat d3.format(',f')
+        # chart.bars.forceY [ 0 ]
         chart.tooltipContent((key, x, y) ->
           "
             <div class='datathon-tooltip'>
