@@ -1,7 +1,8 @@
 @datathon = angular.module 'datathon', ['angular-meteor']
 datathon.controller 'ApplicationCtrl', [
-  '$scope',
-  ($scope) ->
+  '$scope'
+  '$http',
+  ($scope, $http) ->
     $scope.tasks = [
       { text: 'This is task 1' }
       { text: 'This is task 2' }
@@ -57,8 +58,25 @@ datathon.controller 'ApplicationCtrl', [
     # $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIDataPop1)
     # $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIDataPop2)
 
-    $scope.visitPop1 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop1).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop1))
-    $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop2).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop2))
-    $scope.BPPop1 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop1).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop1))
-    $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop2).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop2))
+    $http.get('ed-visits-data-1.json').then (response) ->
+      edVisitsDataPop1 = response.data
+      $http.get('preventive-visits-data-1.json').then (response) ->
+        preventiveVisitsDataPop1 = response.data
+        $scope.visitPop1 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop1).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop1))
+        $http.get('ed-visits-data-2.json').then (response) ->
+          edVisitsDataPop2 = response.data
+          $http.get('preventive-visits-data-2.json').then (response) ->
+            preventiveVisitsDataPop2 = response.data
+            $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop2).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop2))
+      $http.get('bp-systolic-data-1.json').then (response) ->
+        BPSystolicPop1 = response.data
+        $http.get('bp-diastolic-data-1.json').then (response) ->
+          BPDiastolicPop1 = response.data
+          $scope.BPPop1 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop1).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop1))
+          $http.get('bp-systolic-data-2.json').then (response) ->
+            BPSystolicPop2 = response.data
+            $http.get('bp-diastolic-data-2.json').then (response) ->
+              BPDiastolicPop2 = response.data
+              $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop2).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop2))
+              $scope.loaded = true
 ]
