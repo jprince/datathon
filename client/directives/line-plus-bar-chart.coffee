@@ -1,8 +1,8 @@
 datathon.directive 'linePlusBarChart', ->
   controller: ($scope) ->
     populations = [
-      { id: 'pop-1', data: $scope.populationOne }
-      { id: 'pop-2', data: $scope.populationTwo }
+      { id: 'line-plus-bar-pop-1', data: $scope.populationOne }
+      { id: 'line-plus-bar-pop-2', data: $scope.populationTwo }
     ]
 
     _(populations).each (population) ->
@@ -33,10 +33,10 @@ datathon.directive 'linePlusBarChart', ->
     populationTwo: '='
   template: "
     <div class='row'>
-      <div id='pop-1' class='col s6'>
+      <div id='line-plus-bar-pop-1' class='col s6'>
         <svg></svg>
       </div>
-      <div id='pop-2' class='col s6'>
+      <div id='line-plus-bar-pop-2' class='col s6'>
         <svg></svg>
       </div>
     </div>

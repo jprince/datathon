@@ -8,6 +8,9 @@ datathon.controller 'ApplicationCtrl', [
       { text: 'This is task 3' }
     ]
 
-    $scope.BMIPop1 = myData
-    $scope.BMIPop2 = myData
+    $scope.BMIPop1 = linePlusBarData
+    $scope.BMIPop2 = linePlusBarData
+
+    $scope.visitPop1 = multiBarData
+    $scope.visitPop2 = multiBarData
 ]
