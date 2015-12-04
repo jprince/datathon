@@ -13,6 +13,7 @@ datathon.directive 'multiBarChart', ->
                            .showControls(true)
                            .groupSpacing(0.1)
                            .height(250)
+                           .forceY([0,12])
         chart.xAxis.tickFormat d3.format(',f')
         chart.yAxis.tickFormat d3.format(',.1f')
         chart.tooltipContent((key, x, y) ->

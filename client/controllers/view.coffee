@@ -31,7 +31,7 @@ datathon.controller 'ApplicationCtrl', [
       [ { "values": weightedAverageData, "key": key, "color": color } ]
 
     formatLinePlusBarChartData = (color, data) ->
-      weightedAverageData = calculateWeightedAverage(data)
+      weightedAverageData = _calculateWeightedAverage(data)
       values = [
         _(calculateWeightedAverage(data)).map (row) -> [ parseInt(row.x) , row.y ]
       ]
@@ -51,14 +51,14 @@ datathon.controller 'ApplicationCtrl', [
       ]
 
     formatMultiBarData = (key, color, data) ->
-      [ { "key": key, "color": color, "values": calculateWeightedAverage(data) } ]
+      weightedAverageData = calculateWeightedAverage(data)
+      [ { "key": key, "color": color, "values": _(weightedAverageData).sortBy (row) -> parseInt(row.x) } ]
 
-    $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIDataPop1)
-    $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIDataPop2)
+    # $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIDataPop1)
+    # $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIDataPop2)
 
     $scope.visitPop1 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop1).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop1))
     $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop2).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop2))
-
     $scope.BPPop1 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop1).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop1))
-    $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop2).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop1))
+    $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop2).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop2))
 ]

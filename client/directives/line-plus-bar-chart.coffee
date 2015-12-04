@@ -35,6 +35,7 @@ datathon.directive 'linePlusBarChart', ->
             </div>
           "
         )
+        data.forEach (d) -> d.values.forEach (d) -> d.x = +d.x
         d3.select("##{ population.id } svg").datum(data).transition().duration(0).call chart
         nv.utils.windowResize chart.update
         chart

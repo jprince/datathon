@@ -8,10 +8,10 @@ datathon.directive 'lineChart', ->
     _(populations).each (population) ->
       nv.addGraph ->
         chart = nv.models.lineChart()
-                            .margin(left: 30)
+                            .margin(left: 10)
                             .useInteractiveGuideline(true)
                             .showLegend(true)
-                            .showYAxis(true)
+                            .showYAxis(false)
                             .showXAxis(true)
                             .height(250)
         chart.yAxis.axisLabel('mmHg').tickFormat d3.format('.02f')
@@ -27,6 +27,7 @@ datathon.directive 'lineChart', ->
           "
         )
 
+        population.data.forEach (d) -> d.values.forEach (d) -> d.x = +d.x
         chartElem = d3.select("##{population.id} svg").datum(population.data).call chart
         nv.utils.windowResize ->
           chart.update()
