@@ -26,7 +26,6 @@ datathon.directive 'lineChart', ->
             </div>
           "
         )
-        population.data.forEach (d) -> d.values.forEach (d) -> d.x = +d.x
         chartElem = d3.select("##{population.id} svg").datum(population.data).call chart
         nv.utils.windowResize ->
           chart.update()

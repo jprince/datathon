@@ -27,22 +27,20 @@ datathon.controller 'ApplicationCtrl', [
       [ { "values": weightedAverageData, "key": key, "color": color } ]
 
     formatLinePlusBarChartData = (color, data) ->
-      weightedAverageData = _calculateWeightedAverage(data)
-      values = [
-        _(calculateWeightedAverage(data)).map (row) -> [ parseInt(row.x) , row.y ]
-      ]
-
+      weightedAverageData = calculateWeightedAverage(data)
       [
         {
           "key" : "Actual" ,
+          "originalKey": "Actual",
           "bar": true,
           "color": color,
-          "values" : values
-        } ,
+          "values" : _(calculateWeightedAverage(data)).map (row) -> [ parseInt(row.x) , row.y ]
+        },
         {
-          "key" : "Expected" ,
+          "key" : "Expected",
+          "originalKey": "Expected",
           "color" : "#fece34",
-          "values" : [ [ 0 , 20 ] , [ 100, 20 ] ]
+          "values" : [ ]
         }
       ]
 
@@ -50,10 +48,8 @@ datathon.controller 'ApplicationCtrl', [
       weightedAverageData = calculateWeightedAverage(data)
       [ { "key": key, "color": color, "values": _(weightedAverageData).sortBy (row) -> parseInt(row.x) } ]
 
-    # $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIDataPop1)
-    # $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIDataPop2)
-
     BPChartLoaded = $q.defer()
+    BMIChartLoaded = $q.defer()
     visitChartLoaded = $q.defer()
 
     loadBPChartData = ->
@@ -66,6 +62,13 @@ datathon.controller 'ApplicationCtrl', [
         $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPData[2]).concat(formatLineChartData('Diastolic', '#e44145', BPData[3]))
         BPChartLoaded.resolve()
 
+    loadBMIChartData = ->
+      BMI1 = $http.get('bmi-data-1.json').then (response) -> response.data
+      BMI2 = $http.get('bmi-data-2.json').then (response) -> response.data
+      $q.all([BMI1, BMI2]).then (BMIData) ->
+        $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIData[0])
+        $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIData[1])
+
     loadVisitChartData = ->
       ED1 = $http.get('ed-visits-data-1.json').then (response) -> response.data
       preventive1 = $http.get('preventive-visits-data-1.json').then (response) -> response.data
@@ -76,9 +79,10 @@ datathon.controller 'ApplicationCtrl', [
         $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", visitData[2]).concat(formatMultiBarData("Preventive", "#31849a", visitData[3]))
         visitChartLoaded.resolve()
 
-    $q.all([BPChartLoaded.promise, visitChartLoaded.promise]).then ->
+    $q.all([BPChartLoaded.promise, BMIChartLoaded, visitChartLoaded.promise]).then ->
       $scope.dataLoaded = true
 
     loadBPChartData()
+    loadBMIChartData()
     loadVisitChartData()
 ]

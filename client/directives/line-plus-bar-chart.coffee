@@ -7,24 +7,13 @@ datathon.directive 'linePlusBarChart', ->
 
     _(populations).each (population) ->
       nv.addGraph ->
-        data = population.data
         chart = nv.models.linePlusBarChart()
-                            .margin(
-                              top: 0
-                              right: 10
-                              bottom: 50
-                              left: 70)
+                            .margin({ top: 0, right: 10, bottom: 0, left: 30 })
                             .height(250)
-                            .x((d, i) ->
-                              i
-                            )
-                            .y((d, i) ->
-                              d[1]
-                            )
-        # chart.xAxis.tickFormat (d) ->
-        #   dx = data[0].values[d] and data[0].values[d][0] or 0
-        # chart.y1Axis.tickFormat d3.format(',f')
-        # chart.bars.forceY [ 0 ]
+                            .x((d, i) -> i)
+                            .y((d, i) -> d[1])
+                            .options({ focusEnable: false })
+        chart.bars.forceY [ 0, 50 ]
         chart.tooltipContent((key, x, y) ->
           "
             <div class='datathon-tooltip'>
@@ -35,8 +24,8 @@ datathon.directive 'linePlusBarChart', ->
             </div>
           "
         )
-        data.forEach (d) -> d.values.forEach (d) -> d.x = +d.x
-        d3.select("##{ population.id } svg").datum(data).transition().duration(0).call chart
+        d3.select("##{ population.id } svg").datum(population.data).transition().duration(0).call chart
+          .select('.nv-y2.nv-axis').remove();
         nv.utils.windowResize chart.update
         chart
   ]
