@@ -19,7 +19,7 @@ datathon.directive 'linePlusBarChart', ->
             <div class='datathon-tooltip'>
               <h3>#{ x } yr(s) old</h3>
               <p>
-                <span class='label'>BMI: </span>&nbsp;<span>#{ y }</span>
+                <span class='label'>BMI: </span>&nbsp;<span>#{ y.toFixed(2) }</span>
               </p>
             </div>
           "

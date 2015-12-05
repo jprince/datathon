@@ -20,8 +20,8 @@ datathon.directive 'lineChart', ->
             <div class='datathon-tooltip'>
               <h3>#{ data.value } yr(s) old</h3>
               <p>
-                <span class='label'>#{ data.series[0].key }: </span>&nbsp;<span>#{ data.series[0].value }</span><br/>
-                <span class='label'>#{ data.series[1].key }: </span>&nbsp;<span>#{ data.series[1].value }</span>
+                <span class='label'>#{ data.series[0].key }: </span>&nbsp;<span>#{ data.series[0].value.toFixed(0) }</span><br/>
+                <span class='label'>#{ data.series[1].key }: </span>&nbsp;<span>#{ data.series[1].value.toFixed(0) }</span>
               </p>
             </div>
           "
