@@ -2,13 +2,8 @@
 datathon.controller 'ApplicationCtrl', [
   '$scope'
   '$http',
-  ($scope, $http) ->
-    $scope.tasks = [
-      { text: 'This is task 1' }
-      { text: 'This is task 2' }
-      { text: 'This is task 3' }
-    ]
-
+  '$q',
+  ($scope, $http, $q) ->
     calculateWeightedAverage = (data) ->
       values = []
       ages = _((data).map (row) -> row.age).uniq()
@@ -58,25 +53,32 @@ datathon.controller 'ApplicationCtrl', [
     # $scope.BMIPop1 = formatLinePlusBarChartData("#c456a0", BMIDataPop1)
     # $scope.BMIPop2 = formatLinePlusBarChartData("#c456a0", BMIDataPop2)
 
-    $http.get('ed-visits-data-1.json').then (response) ->
-      edVisitsDataPop1 = response.data
-      $http.get('preventive-visits-data-1.json').then (response) ->
-        preventiveVisitsDataPop1 = response.data
-        $scope.visitPop1 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop1).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop1))
-        $http.get('ed-visits-data-2.json').then (response) ->
-          edVisitsDataPop2 = response.data
-          $http.get('preventive-visits-data-2.json').then (response) ->
-            preventiveVisitsDataPop2 = response.data
-            $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", edVisitsDataPop2).concat(formatMultiBarData("Preventive", "#31849a", preventiveVisitsDataPop2))
-      $http.get('bp-systolic-data-1.json').then (response) ->
-        BPSystolicPop1 = response.data
-        $http.get('bp-diastolic-data-1.json').then (response) ->
-          BPDiastolicPop1 = response.data
-          $scope.BPPop1 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop1).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop1))
-          $http.get('bp-systolic-data-2.json').then (response) ->
-            BPSystolicPop2 = response.data
-            $http.get('bp-diastolic-data-2.json').then (response) ->
-              BPDiastolicPop2 = response.data
-              $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPSystolicPop2).concat(formatLineChartData('Diastolic', '#e44145', BPDiastolicPop2))
-              $scope.loaded = true
+    BPChartLoaded = $q.defer()
+    visitChartLoaded = $q.defer()
+
+    loadBPChartData = ->
+      Systolic1 = $http.get('bp-systolic-data-1.json').then (response) -> response.data
+      Diastolic1 = $http.get('bp-diastolic-data-1.json').then (response) -> response.data
+      Systolic2 = $http.get('bp-systolic-data-2.json').then (response) -> response.data
+      Diastolic2 = $http.get('bp-diastolic-data-2.json').then (response) -> response.data
+      $q.all([Systolic1, Diastolic1, Systolic2, Diastolic2]).then (BPData) ->
+        $scope.BPPop1 = formatLineChartData('Systolic', '#e68a00', BPData[0]).concat(formatLineChartData('Diastolic', '#e44145', BPData[1]))
+        $scope.BPPop2 = formatLineChartData('Systolic', '#e68a00', BPData[2]).concat(formatLineChartData('Diastolic', '#e44145', BPData[3]))
+        BPChartLoaded.resolve()
+
+    loadVisitChartData = ->
+      ED1 = $http.get('ed-visits-data-1.json').then (response) -> response.data
+      preventive1 = $http.get('preventive-visits-data-1.json').then (response) -> response.data
+      ED2 = $http.get('ed-visits-data-2.json').then (response) -> response.data
+      preventive2 = $http.get('preventive-visits-data-2.json').then (response) -> response.data
+      $q.all([ED1, preventive1, ED2, preventive2]).then (visitData) ->
+        $scope.visitPop1 = formatMultiBarData("ED", "#7cbf4c", visitData[0]).concat(formatMultiBarData("Preventive", "#31849a", visitData[1]))
+        $scope.visitPop2 = formatMultiBarData("ED", "#7cbf4c", visitData[2]).concat(formatMultiBarData("Preventive", "#31849a", visitData[3]))
+        visitChartLoaded.resolve()
+
+    $q.all([BPChartLoaded.promise, visitChartLoaded.promise]).then ->
+      $scope.dataLoaded = true
+
+    loadBPChartData()
+    loadVisitChartData()
 ]
