@@ -1,9 +1,9 @@
 @datathon = angular.module 'datathon', ['angular-meteor']
 datathon.controller 'ApplicationCtrl', [
-  '$scope'
   '$http',
   '$q',
-  ($scope, $http, $q) ->
+  '$scope',
+  ($http, $q, $scope) ->
     calculateWeightedAverage = (data) ->
       values = []
       ages = _((data).map (row) -> row.age).uniq()

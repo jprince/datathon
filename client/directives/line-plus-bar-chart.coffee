@@ -1,5 +1,5 @@
 datathon.directive 'linePlusBarChart', ->
-  controller: ($scope) ->
+  controller: [ '$scope', ($scope) ->
     populations = [
       { id: 'line-plus-bar-pop-1', data: $scope.populationOne }
       { id: 'line-plus-bar-pop-2', data: $scope.populationTwo }
@@ -39,6 +39,7 @@ datathon.directive 'linePlusBarChart', ->
         d3.select("##{ population.id } svg").datum(data).transition().duration(0).call chart
         nv.utils.windowResize chart.update
         chart
+  ]
   restrict: 'E'
   scope:
     label: '@'

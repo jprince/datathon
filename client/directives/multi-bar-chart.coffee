@@ -1,5 +1,5 @@
 datathon.directive 'multiBarChart', ->
-  controller: ($scope) ->
+  controller: [ '$scope', ($scope) ->
     populations = [
       { id: 'multi-bar-pop-1', data: $scope.populationOne }
       { id: 'multi-bar-pop-2', data: $scope.populationTwo }
@@ -30,7 +30,7 @@ datathon.directive 'multiBarChart', ->
         chartElem.select('g').attr('transform', 'translate(60, 55)')
         nv.utils.windowResize chart.update
         chart
-
+  ]
   restrict: 'E'
   scope:
     label: '@'

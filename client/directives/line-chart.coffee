@@ -1,5 +1,5 @@
 datathon.directive 'lineChart', ->
-  controller: ($scope) ->
+  controller: [ '$scope', ($scope) ->
     populations = [
       { id: 'line-pop-1', data: $scope.populationOne }
       { id: 'line-pop-2', data: $scope.populationTwo }
@@ -31,6 +31,7 @@ datathon.directive 'lineChart', ->
         nv.utils.windowResize ->
           chart.update()
         chart
+  ]
   restrict: 'E'
   scope:
     label: '@'
